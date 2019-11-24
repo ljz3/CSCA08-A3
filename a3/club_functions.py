@@ -58,7 +58,28 @@ def load_profiles(profiles_file: TextIO) -> Tuple[Dict[str, List[str]],
           of type TextIO do not need docstring examples.
 
     """
-    pass  # Remove me when you've implemented this function
+    contents = profiles_file.readlines()
+    person_to_friends = {}
+    person_to_clubs = {}
+    
+    current_profile = ""
+
+    for i in range(len(contents)):
+        if i == 0 or contents[i - 1] == "\n":
+            current_profile = contents[i][:-1]
+            continue
+        elif contents[i] == "\n":
+            continue
+        if "," in contents[i]:
+            if current_profile not in person_to_friends:
+                person_to_friends[current_profile] = []
+            person_to_friends[current_profile].append(contents[i][:-1])
+        else:
+            if current_profile not in person_to_clubs:
+                person_to_clubs[current_profile] = []
+            person_to_clubs[current_profile].append(contents[i][:-1])
+        
+    return (person_to_friends, person_to_clubs)
 
 
 def get_average_club_count(person_to_clubs: Dict[str, List[str]]) -> float:
@@ -69,7 +90,14 @@ def get_average_club_count(person_to_clubs: Dict[str, List[str]]) -> float:
     1.6
 
     """
-    pass  # Remove me when you've implemented this function
+    
+    total_clubs = 0
+
+    for person in person_to_clubs:
+        total_clubs += len(person_to_clubs[person])
+
+    return total_clubs / len(person_to_clubs)
+
 
 
 def get_last_to_first(
@@ -87,6 +115,8 @@ def get_last_to_first(
     True
 
     """
+    
+
     pass  # Remove me when you've implemented this function
 
 
@@ -150,3 +180,7 @@ if __name__ == '__main__':
 
     # import doctest
     # doctest.testmod()
+
+
+f = open("profiles.txt")
+print(get_average_club_count(P2C))
