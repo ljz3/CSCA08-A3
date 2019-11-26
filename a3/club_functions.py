@@ -160,8 +160,15 @@ def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
     """
     inverted = {}
     for key in key_to_value:
-        for value in key_to_value[key]
+        for value in key_to_value[key]:
             if value not in inverted:
+                inverted[value] = []
+            inverted[value].append(key)
+    
+    for key in inverted:
+        inverted[key].sort()
+
+    return inverted
                 
 
 
@@ -212,4 +219,5 @@ if __name__ == '__main__':
 
 f = open("profiles.txt")
 # print(load_profiles(f))
-print(get_last_to_first(P2F))
+# print(get_last_to_first(P2F))
+print(invert_and_sort(P2C))
