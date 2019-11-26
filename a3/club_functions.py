@@ -66,14 +66,16 @@ def load_profiles(profiles_file: TextIO) -> Tuple[Dict[str, List[str]],
 
     for i in range(len(contents)):
         if i == 0 or contents[i - 1] == "\n":
-            current_profile = contents[i][:-1]
+            current_profile = contents[i][:contents[i].index(",")]\
+                + contents[i][contents[i].index(",") + 1:-1]
             continue
         elif contents[i] == "\n":
             continue
         if "," in contents[i]:
             if current_profile not in person_to_friends:
                 person_to_friends[current_profile] = []
-            person_to_friends[current_profile].append(contents[i][:-1])
+            person_to_friends[current_profile].append(contents[i][:contents[i]\
+                .index(",")] + contents[i][contents[i].index(",") + 1:-1])
         else:
             if current_profile not in person_to_clubs:
                 person_to_clubs[current_profile] = []
@@ -115,9 +117,29 @@ def get_last_to_first(
     True
 
     """
-    
 
-    pass  # Remove me when you've implemented this function
+    first_to_last = {}
+    
+    for person in person_to_friends:
+        for friend in person_to_friends[person]:
+            first = friend[:friend.rfind(" ")]
+            last = friend[friend.rfind(" ") + 1:]
+            if last not in first_to_last:
+                first_to_last[last] = []
+            if first not in first_to_last[last]:
+                first_to_last[last].append(first)
+        first = person[:person.rfind(" ")]
+        last = person[person.rfind(" ") + 1:]
+        if last not in first_to_last:
+            first_to_last[last] = []
+        if first not in first_to_last[last]:
+            first_to_last[last].append(first)
+
+    for last in first_to_last:
+        first_to_last[last].sort()
+
+    return first_to_last
+
 
 
 def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
@@ -136,7 +158,13 @@ def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
     True
 
     """
-    pass  # Remove me when you've implemented this function
+    inverted = {}
+    for key in key_to_value:
+        for value in key_to_value[key]
+            if value not in inverted:
+                
+
+
 
 
 def get_clubs_of_friends(person_to_friends: Dict[str, List[str]],
@@ -183,4 +211,5 @@ if __name__ == '__main__':
 
 
 f = open("profiles.txt")
-print(get_average_club_count(P2C))
+# print(load_profiles(f))
+print(get_last_to_first(P2F))
