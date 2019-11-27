@@ -169,9 +169,6 @@ def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
         inverted[key].sort()
 
     return inverted
-                
-
-
 
 
 def get_clubs_of_friends(person_to_friends: Dict[str, List[str]],
@@ -187,8 +184,20 @@ def get_clubs_of_friends(person_to_friends: Dict[str, List[str]],
     ['Comics R Us', 'Rock N Rollers']
 
     """
-    pass  # Remove me when you've implemented this function
+    clubs = []
+    already_in = []
+    if person in person_to_clubs:
+        for club in person_to_clubs[person]:
+            already_in.append(club)
 
+    for friend in person_to_friends[person]:
+        if friend in person_to_clubs:
+            for club in person_to_clubs[friend]:
+                if club not in already_in:
+                    clubs.append(club)
+
+    clubs.sort()
+    return clubs
 
 def recommend_clubs(
         person_to_friends: Dict[str, List[str]],
@@ -203,6 +212,9 @@ def recommend_clubs(
     [('Comet Club', 1), ('Rock N Rollers', 1), ('Smash Club', 1)]
 
     """
+
+
+
     pass  # Remove me when you've implemented this function
 
 
@@ -220,4 +232,5 @@ if __name__ == '__main__':
 f = open("profiles.txt")
 # print(load_profiles(f))
 # print(get_last_to_first(P2F))
-print(invert_and_sort(P2C))
+# print(invert_and_sort(P2C))
+print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
