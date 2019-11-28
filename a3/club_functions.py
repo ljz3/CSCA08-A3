@@ -199,6 +199,8 @@ def get_clubs_of_friends(person_to_friends: Dict[str, List[str]],
     clubs.sort()
     return clubs
 
+
+
 def recommend_clubs(
         person_to_friends: Dict[str, List[str]],
         person_to_clubs: Dict[str, List[str]],
@@ -208,13 +210,12 @@ def recommend_clubs(
     to clubs" dictionary person_to_clubs using the specified
     recommendation system.
 
-    >>> recommend_clubs(P2F, P2C, 'Stephanie J Tanner')
+    >>> recommend_clubs(P2F, P2C, 'Stephanie J Tanner',)
     [('Comet Club', 1), ('Rock N Rollers', 1), ('Smash Club', 1)]
 
     """
     clubs = {}
     list_of_tuple = []
-    list_of_common_clubs = []
     for club in get_clubs_of_friends(person_to_friends, person_to_clubs, person):
         if club not in clubs:
             clubs[club] = 0
@@ -223,30 +224,22 @@ def recommend_clubs(
     if person in person_to_clubs:
         for club in person_to_clubs[person]:
             for member in invert_and_sort(person_to_clubs)[club]:
-                if member not in list_of_common_clubs:
-                    for member_club in person_to_clubs[member]:
-                        if member_club not in person_to_clubs[person]:
-                            if member_club not in clubs:
-                                clubs[member_club] = 0
-                            clubs[member_club] += 1
-                
+                clubs = add_clubs_not_repeating(person_to_clubs, clubs, member, person)
 
-    # """
-    # if person and friend have common club and is not in clubs, then all friend clubs get +1
-    # """
+    return clubs
 
-    # for friend in person_to_friends[person]:
-    #     same_club = False
-    #     if friend not in person_to_clubs:
-    #         continue
-    #     for club in person_to_clubs[friend]:
-    #         if (person not in person_to_clubs or club in person_to_clubs[person]) and club not in clubs:
-    #             same_club = True
-    #     if same_club:
-    #         for club in person_to_clubs[friend]:
-    #             if club in clubs:
-    #                 clubs[club] += 1
+def add_clubs_not_repeating(
+    person_to_clubs: Dict[str, List[str]],
+    clubs: Dict[str, List[str]],
+    member: str, person: str) -> Dict[str, List[str]]:
 
+    list_of_common_clubs = []
+    if member not in list_of_common_clubs:
+        for member_club in person_to_clubs[member]:
+            if member_club not in person_to_clubs[person]:
+                if member_club not in clubs:
+                    clubs[member_club] = 0
+                clubs[member_club] += 1
     return clubs
 
 
@@ -267,4 +260,5 @@ f = open("profiles.txt")
 # print(invert_and_sort(P2C))
 # print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
 # print(get_clubs_of_friends(P2F, P2C, 'Jesse Katsopolis'))
-print(recommend_clubs(P2F, P2C, 'Stephanie J Tanner'))
+# print(recommend_clubs(P2F, P2C, 'Stephanie J Tanner'))
+print(recommend_clubs(P2F, P2C, 'Jesse Katsopolis'))
