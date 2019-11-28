@@ -208,14 +208,36 @@ def recommend_clubs(
     to clubs" dictionary person_to_clubs using the specified
     recommendation system.
 
-    >>> recommend_clubs(P2F, P2C, 'Stephanie J Tanner',)
+    >>> recommend_clubs(P2F, P2C, 'Stephanie J Tanner')
     [('Comet Club', 1), ('Rock N Rollers', 1), ('Smash Club', 1)]
 
     """
+    clubs = {}
+    for club in get_clubs_of_friends(person_to_friends, person_to_clubs, person):
+        if club not in clubs:
+            clubs[club] = 0
+        clubs[club] += 1
 
+    if person in person_to_clubs:
+        
 
+    # """
+    # if person and friend have common club and is not in clubs, then all friend clubs get +1
+    # """
 
-    pass  # Remove me when you've implemented this function
+    # for friend in person_to_friends[person]:
+    #     same_club = False
+    #     if friend not in person_to_clubs:
+    #         continue
+    #     for club in person_to_clubs[friend]:
+    #         if (person not in person_to_clubs or club in person_to_clubs[person]) and club not in clubs:
+    #             same_club = True
+    #     if same_club:
+    #         for club in person_to_clubs[friend]:
+    #             if club in clubs:
+    #                 clubs[club] += 1
+
+    return clubs
 
 
 if __name__ == '__main__':
@@ -233,4 +255,6 @@ f = open("profiles.txt")
 # print(load_profiles(f))
 # print(get_last_to_first(P2F))
 # print(invert_and_sort(P2C))
-print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
+# print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
+print(get_clubs_of_friends(P2F, P2C, 'Jesse Katsopolis'))
+print(recommend_clubs(P2F, P2C, 'Jesse Katsopolis'))
