@@ -213,13 +213,23 @@ def recommend_clubs(
 
     """
     clubs = {}
+    list_of_tuple = []
+    list_of_common_clubs = []
     for club in get_clubs_of_friends(person_to_friends, person_to_clubs, person):
         if club not in clubs:
             clubs[club] = 0
         clubs[club] += 1
 
     if person in person_to_clubs:
-        
+        for club in person_to_clubs[person]:
+            for member in invert_and_sort(person_to_clubs)[club]:
+                if member not in list_of_common_clubs:
+                    for member_club in person_to_clubs[member]:
+                        if member_club not in person_to_clubs[person]:
+                            if member_club not in clubs:
+                                clubs[member_club] = 0
+                            clubs[member_club] += 1
+                
 
     # """
     # if person and friend have common club and is not in clubs, then all friend clubs get +1
@@ -256,5 +266,5 @@ f = open("profiles.txt")
 # print(get_last_to_first(P2F))
 # print(invert_and_sort(P2C))
 # print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
-print(get_clubs_of_friends(P2F, P2C, 'Jesse Katsopolis'))
-print(recommend_clubs(P2F, P2C, 'Jesse Katsopolis'))
+# print(get_clubs_of_friends(P2F, P2C, 'Jesse Katsopolis'))
+print(recommend_clubs(P2F, P2C, 'Stephanie J Tanner'))
