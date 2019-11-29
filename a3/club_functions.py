@@ -216,17 +216,30 @@ def recommend_clubs(
     """
     clubs = {}
     list_of_tuple = []
+    list_of_nums = []
     for club in get_clubs_of_friends(person_to_friends, person_to_clubs, person):
         if club not in clubs:
-            clubs[club] = 0
-        clubs[club] += 1
+            clubs[club] = [0]
+        clubs[club][0] += 1
 
     if person in person_to_clubs:
         for club in person_to_clubs[person]:
             for member in invert_and_sort(person_to_clubs)[club]:
                 clubs = add_clubs_not_repeating(person_to_clubs, clubs, member, person)
 
-    return clubs
+    inverted = invert_and_sort(clubs)
+
+    for key in inverted:
+        list_of_nums.append((key))
+
+    for num in list_of_nums:
+        for key in inverted:
+            if key == num:
+                for club in inverted[key]:
+                    list_of_tuple.append((club, key))
+                    
+    return list_of_tuple
+
 
 def add_clubs_not_repeating(
     person_to_clubs: Dict[str, List[str]],
@@ -238,8 +251,8 @@ def add_clubs_not_repeating(
         for member_club in person_to_clubs[member]:
             if member_club not in person_to_clubs[person]:
                 if member_club not in clubs:
-                    clubs[member_club] = 0
-                clubs[member_club] += 1
+                    clubs[member_club] = [0]
+                clubs[member_club][0] += 1
     return clubs
 
 
