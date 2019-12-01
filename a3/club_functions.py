@@ -98,7 +98,10 @@ def get_average_club_count(person_to_clubs: Dict[str, List[str]]) -> float:
     for person in person_to_clubs:
         total_clubs += len(person_to_clubs[person])
 
-    return total_clubs / len(person_to_clubs)
+    if not len(person_to_clubs) == 0:
+        return total_clubs / len(person_to_clubs)
+    else:
+        return 0
 
 
 
@@ -215,9 +218,9 @@ def recommend_clubs(
 
     """
     clubs = {}
-    list_of_tuple = []
-    list_of_nums = []
-    for club in get_clubs_of_friends(person_to_friends, person_to_clubs, person):
+    for club in get_clubs_of_friends(
+            person_to_friends, person_to_clubs, person):
+        
         if club not in clubs:
             clubs[club] = [0]
         clubs[club][0] += 1
@@ -225,8 +228,23 @@ def recommend_clubs(
     if person in person_to_clubs:
         for club in person_to_clubs[person]:
             for member in invert_and_sort(person_to_clubs)[club]:
-                clubs = add_clubs_not_repeating(person_to_clubs, clubs, member, person)
+                clubs = add_clubs_not_repeating(
+                    person_to_clubs, clubs, member, person)
+    
+    return convert_dict_to_tup_list(clubs)
 
+
+def convert_dict_to_tup_list(
+        clubs: Dict[str, List[int]]) -> List[Tuple[str, int]]:
+    """
+    Returns a list of tuples using the contents from clubs.
+    
+    >>> convert_dict_to_tup_list({'Comics R Us': [2], 'Smash Club': [1]})
+    [('Comics R Us', 2), ('Smash Club', 1)]
+    """
+
+    list_of_tuple = []
+    list_of_nums = []
     inverted = invert_and_sort(clubs)
 
     for key in inverted:
@@ -237,15 +255,25 @@ def recommend_clubs(
             if key == num:
                 for club in inverted[key]:
                     list_of_tuple.append((club, key))
-                    
+
     return list_of_tuple
 
 
-def add_clubs_not_repeating(
-    person_to_clubs: Dict[str, List[str]],
-    clubs: Dict[str, List[str]],
-    member: str, person: str) -> Dict[str, List[str]]:
 
+def add_clubs_not_repeating(
+        person_to_clubs: Dict[str, List[str]],
+        clubs: Dict[str, List[str]],
+        member: str, person: str) -> Dict[str, List[str]]:
+
+    """
+    Returns clubs with each club of member with a 
+    point added if person is not in the club already.
+    The list of which clubs that person and member is
+    in is called person_to_clubs
+
+    >>> add_clubs_not_repeating(P2C, {'Comics R Us': [1]}, Danny R Tanner, Jesse Katsopolis)
+    {'Comics R Us': [1]}
+    """
     list_of_common_clubs = []
     if member not in list_of_common_clubs:
         for member_club in person_to_clubs[member]:
@@ -266,12 +294,3 @@ if __name__ == '__main__':
     # import doctest
     # doctest.testmod()
 
-
-f = open("profiles.txt")
-# print(load_profiles(f))
-# print(get_last_to_first(P2F))
-# print(invert_and_sort(P2C))
-# print(get_clubs_of_friends(P2F, P2C, 'Danny R Tanner'))
-# print(get_clubs_of_friends(P2F, P2C, 'Jesse Katsopolis'))
-# print(recommend_clubs(P2F, P2C, 'Stephanie J Tanner'))
-print(recommend_clubs(P2F, P2C, 'Jesse Katsopolis'))
