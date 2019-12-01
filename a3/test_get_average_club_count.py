@@ -70,15 +70,6 @@ class TestGetAverageClubCount(unittest.TestCase):
         msg = "Expected {}, but returned {}".format(expected, actual)
         self.assertAlmostEqual(actual, expected, msg=msg)
 
-    def test_08_two_people_same_name_two_clubs(self):
-        param = {'Claire Dunphy': ['Parent Teacher Association', 'League Club'], 
-        'Claire Dunphy': ['Parent Teacher Association', 'League Club']}
-        actual = club_functions.get_average_club_count(param)
-        expected = 2.0
-        msg = "Expected {}, but returned {}".format(expected, actual)
-        self.assertAlmostEqual(actual, expected, msg=msg)
-
-
 
 if __name__ == '__main__':
     unittest.main(exit=False)
