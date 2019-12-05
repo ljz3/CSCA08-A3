@@ -163,11 +163,16 @@ def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
     """
     inverted = {}
     for key in key_to_value:
-        for value in key_to_value[key]:
+        if key_to_value[key] is list:
+            for value in key_to_value[key]:
+                if value not in inverted:
+                    inverted[value] = []
+                inverted[value].append(key)
+        else:
             if value not in inverted:
                 inverted[value] = []
             inverted[value].append(key)
-    
+            
     for key in inverted:
         inverted[key].sort()
 
@@ -294,3 +299,5 @@ if __name__ == '__main__':
     # import doctest
     # doctest.testmod()
 
+
+print(invert_and_sort( recommend_clubs(P2F, P2C, "Jesse Katsopolis")))
