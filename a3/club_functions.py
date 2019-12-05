@@ -92,7 +92,6 @@ def get_average_club_count(person_to_clubs: Dict[str, List[str]]) -> float:
     1.6
 
     """
-    
     total_clubs = 0
 
     for person in person_to_clubs:
@@ -102,7 +101,6 @@ def get_average_club_count(person_to_clubs: Dict[str, List[str]]) -> float:
         return total_clubs / len(person_to_clubs)
     else:
         return 0
-
 
 
 def get_last_to_first(
@@ -120,7 +118,6 @@ def get_last_to_first(
     True
 
     """
-
     first_to_last = {}
     
     for person in person_to_friends:
@@ -163,18 +160,17 @@ def invert_and_sort(key_to_value: Dict[object, object]) -> Dict[object, list]:
     """
     inverted = {}
     for key in key_to_value:
-        if key_to_value[key] is list:
+        if type(key_to_value[key]) is list:
             for value in key_to_value[key]:
                 if value not in inverted:
                     inverted[value] = []
                 inverted[value].append(key)
+            for inv_key in inverted:
+                inverted[inv_key].sort()
         else:
-            if value not in inverted:
-                inverted[value] = []
-            inverted[value].append(key)
-            
-    for key in inverted:
-        inverted[key].sort()
+            if key_to_value[key] not in inverted:
+                inverted[key_to_value[key]] = []
+            inverted[key_to_value[key]].append(key)
 
     return inverted
 
@@ -206,7 +202,6 @@ def get_clubs_of_friends(person_to_friends: Dict[str, List[str]],
 
     clubs.sort()
     return clubs
-
 
 
 def recommend_clubs(
@@ -247,7 +242,6 @@ def convert_dict_to_tup_list(
     >>> convert_dict_to_tup_list({'Comics R Us': [2], 'Smash Club': [1]})
     [('Comics R Us', 2), ('Smash Club', 1)]
     """
-
     list_of_tuple = []
     list_of_nums = []
     inverted = invert_and_sort(clubs)
@@ -262,7 +256,6 @@ def convert_dict_to_tup_list(
                     list_of_tuple.append((club, key))
 
     return list_of_tuple
-
 
 
 def add_clubs_not_repeating(
@@ -298,6 +291,3 @@ if __name__ == '__main__':
 
     # import doctest
     # doctest.testmod()
-
-
-print(invert_and_sort( recommend_clubs(P2F, P2C, "Jesse Katsopolis")))
